@@ -15,6 +15,10 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
+        _logger.LogError("This is a serious error");
+        _logger.LogWarning("This is a warning");
+        _logger.LogWarning("Second warning!");
+        _logger.LogInformation("This is an information");
         return View();
     }
 

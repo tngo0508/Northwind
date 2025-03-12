@@ -54,6 +54,8 @@ app.MapControllerRoute(
 app.MapRazorPages()
     .WithStaticAssets();
 
+app.MapGet("/env", () => $"Environment is { app.Environment.EnvironmentName }");
+
 app.Run();
 
 #endregion
