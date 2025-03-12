@@ -17,6 +17,7 @@ namespace Northwind.EntityModels;
 public partial class Order
 {
     [Key]
+    [RegularExpression("[A-Z]{5}")]
     public int OrderId { get; set; }
 
     [StringLength(5)]
