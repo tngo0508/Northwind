@@ -180,4 +180,25 @@ public class HomeController : Controller
         }
         return RedirectToAction("Suppliers");
     }
+
+    public IActionResult ProductsThatCostMoreThan(decimal? price)
+    {
+        if (!price.HasValue)
+        {
+            return BadRequest("You must pass a product price in the query string");
+        }
+
+        IEnumerable<Product> model = _db.Products
+            .Include(p => p.Category)
+            .Include(p => p.Supplier)
+            .Where(p => p.UnitPrice > price);
+
+        if (!model.Any())
+        {
+            return NotFound($"No Products cost more than {price:C}");
+        }
+
+        ViewData["MaxPrice"] = price.Value.ToString("C");
+        return View("Views/Home/CostlyProducts.cshtml", model);
+    }
 }
