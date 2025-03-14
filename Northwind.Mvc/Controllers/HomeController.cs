@@ -203,4 +203,21 @@ public class HomeController : Controller
         ViewData["MaxPrice"] = price.Value.ToString("C");
         return View("Views/Home/CostlyProducts.cshtml", model);
     }
+
+    public async Task<IActionResult> CategoryDetail(int? id)
+    {
+        if (!id.HasValue)
+        {
+            return BadRequest("you must pass a category ID in the route");
+        }
+
+        Category? model = await _db.Categories.Include(p => p.Products)
+            .SingleOrDefaultAsync(p => p.CategoryId == id);
+        if (model is null)
+        {
+            return NotFound($"Category ID {id} not found");
+        }
+
+        return View(model);
+    }
 }
