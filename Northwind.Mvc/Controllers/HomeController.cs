@@ -262,4 +262,11 @@ public class HomeController : Controller
     {
         return View(shipper);
     }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult ProcessShipper(Shipper? shipper)
+    {
+        return Json(shipper);
+    }
 }
