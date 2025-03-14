@@ -31,8 +31,25 @@ public class HomeController : Controller
     }
 
     [Route("private")]
-    public IActionResult Privacy()
+    public async Task<IActionResult> Privacy()
     {
+        // Construct a dictionary to store properties of a shipper
+        Dictionary<string, string>? keyValuePairs = null;
+        
+        // Find the shipper with ID of 1
+        Shipper? shipper1 = await _db.Shippers.FindAsync(1);
+
+        if (shipper1 is not null)
+        {
+            keyValuePairs = new()
+            {
+                { "ShipperId", shipper1.ShipperId.ToString() },
+                { "CompanyName", shipper1.CompanyName },
+                { "Phone", shipper1.Phone ?? string.Empty }
+            };
+        }
+
+        ViewData["shipper1"] = keyValuePairs;
         return View();
     }
 
@@ -219,5 +236,30 @@ public class HomeController : Controller
         }
 
         return View(model);
+    }
+
+    public IActionResult Orders(string? id = null, string? country = null)
+    {
+        IEnumerable<Order> model = _db.Orders
+            .Include(order => order.Customer)
+            .Include(order => order.OrderDetails);
+        if (id is not null)
+        {
+            model = model.Where(order => order?.CustomerId == id);
+        }
+        else if (country is not null)
+        {
+            model = model.Where(order => order.Customer?.Country == country);
+        }
+
+        model = model.OrderByDescending(order => order.OrderDetails
+                .Sum(detail => detail.Quantity * detail.UnitPrice))
+            .AsEnumerable();
+        return View(model);
+    }
+
+    public IActionResult Shipper(Shipper shipper)
+    {
+        return View(shipper);
     }
 }
