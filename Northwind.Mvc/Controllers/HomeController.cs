@@ -17,14 +17,16 @@ public class HomeController : Controller
         _db = db;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
         _logger.LogError("This is a serious error");
         _logger.LogWarning("This is a warning");
         _logger.LogWarning("Second warning!");
         _logger.LogInformation("This is an information");
-        HomeIndexViewModel model = new(VisitorCount: Random.Shared.Next(1, 1001), Categories: _db.Categories.ToList(),
-            Products: _db.Products.ToList());
+        HomeIndexViewModel model = new(
+            VisitorCount: Random.Shared.Next(1, 1001), 
+            Categories: await _db.Categories.ToListAsync(),
+            Products: await _db.Products.ToListAsync());
         return View(model);
     }
 
@@ -40,15 +42,15 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
-    public IActionResult ProductDetail(int? id)
+    public async Task<IActionResult> ProductDetail(int? id)
     {
         if (!id.HasValue)
         {
             return BadRequest("You must pass a product ID in the route, for example, /Home/ProductDetail/21");
         }
 
-        Product? model = _db.Products.Include(p => p.Category)
-            .SingleOrDefault(p => p.ProductId == id);
+        Product? model = await _db.Products.Include(p => p.Category)
+            .SingleOrDefaultAsync(p => p.ProductId == id);
 
         if (model is null)
         {
