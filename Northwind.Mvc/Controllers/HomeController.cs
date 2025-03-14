@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Northwind.EntityModels;
 using Northwind.Mvc.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Northwind.Mvc.Controllers;
 
@@ -36,5 +37,22 @@ public class HomeController : Controller
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    }
+
+    public IActionResult ProductDetail(int? id)
+    {
+        if (!id.HasValue)
+        {
+            return BadRequest("You must pass a product ID in the route, for example, /Home/ProductDetail/21");
+        }
+
+        Product? model = _db.Products.Include(p => p.Category).SingleOrDefault(p => p.ProductId == id);
+
+        if (model is null)
+        {
+            return NotFound($"ProductId {id} not found");
+        }
+        
+        return View(model);
     }
 }
