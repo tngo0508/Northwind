@@ -269,4 +269,9 @@ public class HomeController : Controller
     {
         return Json(shipper);
     }
+
+    public IActionResult Contact()
+    {
+        return View();
+    }
 }
