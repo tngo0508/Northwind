@@ -40,19 +40,19 @@
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>Orders.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Views\Orders\Index.resx">
+      <EmbeddedResource Update="Resources\Views\Orders\Orders.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>Index.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Views\Orders\Index.en-GB.resx">
+      <EmbeddedResource Update="Resources\Views\Orders\Orders.en-GB.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>Index.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Views\Orders\Index.fr-FR.resx">
+      <EmbeddedResource Update="Resources\Views\Orders\Orders.fr-FR.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>Index.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Views\Orders\Index.fr.resx">
+      <EmbeddedResource Update="Resources\Views\Orders\Orders.fr.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>Index.Designer.cs</LastGenOutput>
       </EmbeddedResource>

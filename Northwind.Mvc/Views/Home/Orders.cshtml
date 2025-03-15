@@ -1,18 +1,20 @@
-﻿@model System.Collections.Generic.IEnumerable<Northwind.EntityModels.Order>
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@model System.Collections.Generic.IEnumerable<Northwind.EntityModels.Order>
+@inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Orders";
+    ViewData["Title"] = Localizer["Orders"];
 }
 <div class="text-center">
-    <h1 class="display-4">
+    <h1 class="display-4">@ViewData["Title"]</h1>
         <table class="table table-bordered table-striped">
             <thead>
             <tr>
-                <th>Order ID</th>
-                <th>Order Date</th>
-                <th>Company Name</th>
-                <th>Country</th>
-                <th>Item Count</th>
-                <th>Order Total</th>
+                <th>@Localizer["Order Id"]</th>
+                <th>@Localizer["Order Date"]</th>
+                <th>@Localizer["Company Name"]</th>
+                <th>@Localizer["Country"]</th>
+                <th>@Localizer["Item Count"]</th>
+                <th>@Localizer["Order Total"]</th>
             </tr>
             </thead>
             <tbody>
@@ -22,6 +24,7 @@
                     <td>@order.OrderId</td>
                     <td>@order.OrderDate?.ToString("D")</td>
                     <td>@order.Customer?.CompanyName</td>
+                    <td>@order.Customer?.Country</td>
                     <td>@order.OrderDetails.Count()</td>
                     <td>@order.OrderDetails.Sum(detail => detail.Quantity * detail.UnitPrice).ToString("C"))</td>
                 </tr>
@@ -29,5 +32,4 @@
             </tbody>
         </table>
         <a id="endOfTable"/>
-    </h1>
 </div>

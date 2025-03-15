@@ -118,24 +118,24 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Company Name" xml:space="preserve">
-    <value>Company Name</value>
+    <value>Nom de l'entreprise</value>
   </data>
   <data name="Country" xml:space="preserve">
-    <value>Country</value>
+    <value>Pays</value>
   </data>
   <data name="Item Count" xml:space="preserve">
-    <value>Item Count</value>
+    <value>Nombre d'éléments</value>
   </data>
   <data name="Order Date" xml:space="preserve">
-    <value>Order Date</value>
+    <value>Date de commande</value>
   </data>
   <data name="Order ID" xml:space="preserve">
-    <value>Order ID</value>
+    <value>Numéro de commande</value>
   </data>
   <data name="Order Total" xml:space="preserve">
-    <value>Order Total</value>
+    <value>Total de la commande</value>
   </data>
   <data name="Orders" xml:space="preserve">
-    <value>Orders</value>
+    <value>Commandes (Neutral French)</value>
   </data>
 </root>

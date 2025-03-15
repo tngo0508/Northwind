@@ -21,7 +21,8 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
-builder.Services.AddControllersWithViews();
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services.AddControllersWithViews().AddViewLocalization();
 
 string? sqlServerConnectionString = builder.Configuration.GetConnectionString("NorthwindConnection");
 
@@ -44,6 +45,16 @@ var app = builder.Build();
 #endregion
 
 #region Configure the HTTP request pipeline
+
+string[] cultures = { "en-US", "en-GB", "fr", "fr-FR" };
+RequestLocalizationOptions localizationOptions = new();
+
+// cultures[0] will be "en-US"
+localizationOptions.SetDefaultCulture(cultures[0])
+    .AddSupportedCultures(cultures)
+    .AddSupportedUICultures(cultures);
+
+app.UseRequestLocalization(localizationOptions);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
