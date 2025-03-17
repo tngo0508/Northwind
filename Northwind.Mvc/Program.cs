@@ -14,6 +14,8 @@ using Northwind.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDistributedMemoryCache();
+
 builder.Services.AddSingleton<IMemoryCache>(new MemoryCache(
     new MemoryCacheOptions
     {

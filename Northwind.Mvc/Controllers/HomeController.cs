@@ -1,10 +1,12 @@
 using System.Diagnostics;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Caching.Memory; // To use IMemoryCache
 using Northwind.EntityModels;
 using Northwind.Mvc.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace Northwind.Mvc.Controllers;
 
@@ -13,14 +15,18 @@ public class HomeController : Controller
     private readonly ILogger<HomeController> _logger;
     private readonly NorthwindContext _db;
     private readonly IMemoryCache _memoryCache;
+    private readonly IDistributedCache _distributeCache;
+    private const string CategoryCacheKey = "CATEGORIES";
     private const string ProductKey = "PROD";
 
     public HomeController(ILogger<HomeController> logger, 
-        NorthwindContext db, IMemoryCache memoryCache)
+        NorthwindContext db, IMemoryCache memoryCache,
+        IDistributedCache distributedCache)
     {
         _logger = logger;
         _db = db;
         _memoryCache = memoryCache;
+        _distributeCache = distributedCache;
     }
 
     [ResponseCache(Duration = DurationInSeconds.TenSeconds,
@@ -31,9 +37,29 @@ public class HomeController : Controller
         // _logger.LogWarning("This is a warning");
         // _logger.LogWarning("Second warning!");
         // _logger.LogInformation("This is an information");
+        
+        // Try to get the cached value.
+        List<Category>? cachedValue = null;
+        byte[]? cachedValueBytes = await _distributeCache.GetAsync(CategoryCacheKey);
+
+        if (cachedValueBytes is null)
+        {
+            cachedValue = await GetCategoriesFromDatabaseAsync();
+        }
+        else
+        {
+            cachedValue = JsonSerializer.Deserialize<List<Category>>(cachedValueBytes);
+
+            if (cachedValue is null)
+            {
+                cachedValue = await GetCategoriesFromDatabaseAsync();
+            }
+        }
+        
         HomeIndexViewModel model = new(
             VisitorCount: Random.Shared.Next(1, 1001), 
-            Categories: await _db.Categories.ToListAsync(),
+            // Categories: await _db.Categories.ToListAsync(),
+            Categories: cachedValue ?? new List<Category>(), 
             Products: await _db.Products.ToListAsync());
         return View(model);
     }
@@ -300,5 +326,23 @@ public class HomeController : Controller
     public IActionResult Contact()
     {
         return View();
+    }
+
+    private async Task<List<Category>> GetCategoriesFromDatabaseAsync()
+    {
+        List<Category> cachedValue = await _db.Categories.ToListAsync();
+        DistributedCacheEntryOptions cacheEntryOptions = new()
+        {
+            // Allow readers to reset the cache entry's lifetime.
+            SlidingExpiration = TimeSpan.FromMinutes(1),
+
+            // Set an absolute expiration time for the cache entry.
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(20),
+        };
+
+        byte[]? cachedValueBytes = JsonSerializer.SerializeToUtf8Bytes(cachedValue);
+        await _distributeCache.SetAsync(CategoryCacheKey, cachedValueBytes, cacheEntryOptions);
+
+        return cachedValue;
     }
 }
