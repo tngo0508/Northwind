@@ -22,7 +22,7 @@ public class HomeController : Controller
         Location = ResponseCacheLocation.Any)]
     public async Task<IActionResult> Index()
     {
-        // _logger.LogError("This is a serious error");
+        // _logger.LogError("This is a serious error")o
         // _logger.LogWarning("This is a warning");
         // _logger.LogWarning("Second warning!");
         // _logger.LogInformation("This is an information");
@@ -62,8 +62,9 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
-    public async Task<IActionResult> ProductDetail(int? id)
+    public async Task<IActionResult> ProductDetail(int? id, string alertstyle = "success")
     {
+        ViewData["alertstyle"] = alertstyle;
         if (!id.HasValue)
         {
             return BadRequest("You must pass a product ID in the route, for example, /Home/ProductDetail/21");

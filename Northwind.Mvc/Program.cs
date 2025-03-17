@@ -44,7 +44,8 @@ else
 
 builder.Services.AddOutputCache(options =>
 {
-    options.DefaultExpirationTimeSpan = TimeSpan.FromSeconds(DurationInSeconds.TenSeconds);
+    options.DefaultExpirationTimeSpan = TimeSpan.FromSeconds(DurationInSeconds.HalfMinute);
+    options.AddPolicy("views", p => p.SetVaryByQuery("alertstyle"));
 });
 
 var app = builder.Build();
@@ -89,7 +90,7 @@ app.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets()
-    .CacheOutput();
+    // .CacheOutput(policyName: "views");
 
 app.MapRazorPages()
     .WithStaticAssets();
