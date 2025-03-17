@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Caching.Memory; // To use IMemoryCache
 using Northwind.EntityModels;
 using Northwind.Mvc.Models;
 using Microsoft.EntityFrameworkCore;
@@ -11,11 +12,15 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly NorthwindContext _db;
+    private readonly IMemoryCache _memoryCache;
+    private const string ProductKey = "PROD";
 
-    public HomeController(ILogger<HomeController> logger, NorthwindContext db)
+    public HomeController(ILogger<HomeController> logger, 
+        NorthwindContext db, IMemoryCache memoryCache)
     {
         _logger = logger;
         _db = db;
+        _memoryCache = memoryCache;
     }
 
     [ResponseCache(Duration = DurationInSeconds.TenSeconds,
@@ -69,14 +74,31 @@ public class HomeController : Controller
         {
             return BadRequest("You must pass a product ID in the route, for example, /Home/ProductDetail/21");
         }
-
-        Product? model = await _db.Products.Include(p => p.Category)
-            .SingleOrDefaultAsync(p => p.ProductId == id);
-
-        if (model is null)
+        
+        // Try to get the cached product.
+        if (!_memoryCache.TryGetValue($"{ProductKey}{id}", out Product? model))
         {
-            return NotFound($"ProductId {id} not found");
+            // If the cached value is not found, get the value from the database.
+            model = await _db.Products.Include(p => p.Category)
+                .SingleOrDefaultAsync(p => p.ProductId == id);
+
+            if (model is null)
+            {
+                return NotFound($"ProductId {id} not found");
+            }
+
+            MemoryCacheEntryOptions cacheEntryOptions = new()
+            {
+                SlidingExpiration = TimeSpan.FromSeconds(5),
+                Size = 1 // product
+            };
+            
+            _memoryCache.Set($"{ProductKey}{id}", model, cacheEntryOptions);
         }
+
+        MemoryCacheStatistics? stats = _memoryCache.GetCurrentStatistics();
+        
+        _logger.LogInformation($"Memory cache. Total hits: {stats?.TotalHits}. Estimated size: {stats?.CurrentEstimatedSize}.");
 
         return View(model);
     }

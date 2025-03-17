@@ -3,6 +3,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Caching.Memory; // To use IMemoryCache and so on.
 using Northwind.Mvc.Data;
 using Northwind.EntityModels;
 using Northwind.Mvc;
@@ -12,6 +13,13 @@ using Northwind.Mvc;
 #region Configure the host web server including services.
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSingleton<IMemoryCache>(new MemoryCache(
+    new MemoryCacheOptions
+    {
+        TrackStatistics = true,
+        SizeLimit = 50 // Products
+    }));
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
