@@ -18,12 +18,14 @@ public class HomeController : Controller
         _db = db;
     }
 
+    [ResponseCache(Duration = DurationInSeconds.TenSeconds,
+        Location = ResponseCacheLocation.Any)]
     public async Task<IActionResult> Index()
     {
-        _logger.LogError("This is a serious error");
-        _logger.LogWarning("This is a warning");
-        _logger.LogWarning("Second warning!");
-        _logger.LogInformation("This is an information");
+        // _logger.LogError("This is a serious error");
+        // _logger.LogWarning("This is a warning");
+        // _logger.LogWarning("Second warning!");
+        // _logger.LogInformation("This is an information");
         HomeIndexViewModel model = new(
             VisitorCount: Random.Shared.Next(1, 1001), 
             Categories: await _db.Categories.ToListAsync(),

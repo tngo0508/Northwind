@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
 using Northwind.Mvc.Data;
 using Northwind.EntityModels;
+using Northwind.Mvc;
 
 #endregion
 
@@ -40,6 +41,11 @@ else
 
     builder.Services.AddNorthwindContext(sql.ConnectionString);
 }
+
+builder.Services.AddOutputCache(options =>
+{
+    options.DefaultExpirationTimeSpan = TimeSpan.FromSeconds(DurationInSeconds.TenSeconds);
+});
 
 var app = builder.Build();
 
@@ -77,13 +83,19 @@ app.UseAuthorization();
 
 app.MapStaticAssets();
 
+app.UseOutputCache();
+
 app.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
+    .WithStaticAssets()
+    .CacheOutput();
 
 app.MapRazorPages()
     .WithStaticAssets();
+
+app.MapGet("/notcached", () => DateTime.Now.ToString());
+app.MapGet("/cached", () => DateTime.Now.ToString()).CacheOutput();
 
 app.MapGet("/env", () => $"Environment is { app.Environment.EnvironmentName }");
 

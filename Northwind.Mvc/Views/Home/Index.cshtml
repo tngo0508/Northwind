@@ -3,10 +3,11 @@
     ViewData["Title"] = "Home Page";
     string currentItem = "";
 }
-<cache expires-after="@TimeSpan.FromMinutes(10)"/>
+@* <cache expires-after="@TimeSpan.FromMinutes(10)"/> *@
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
+    <p class="alert alert-primary">@DateTime.Now.ToLongTimeString()</p>
     <div class="row">
         <div class="col">
             <h2>Live</h2>
