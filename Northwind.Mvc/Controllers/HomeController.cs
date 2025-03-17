@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Northwind.EntityModels;
 using Northwind.Mvc.Models;
 using Microsoft.EntityFrameworkCore;
@@ -78,6 +79,7 @@ public class HomeController : Controller
     }
     
     // This action method will handle GET and other requests except POST
+    [Authorize(Roles = "Administrators")]
     public IActionResult ModelBinding()
     {
         return View();
