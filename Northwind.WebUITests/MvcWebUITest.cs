@@ -117,4 +117,29 @@ public class MvcWebUITest
                 $"products-{timestamp}.png")
         });
     }
+
+    // make sure we are in the Northwind.WebUITests directory
+    // use command: pwsh bin/Debug/net8.0/playwright.ps1 codegen https://localhost:5021/
+    // to generate the code in the function below
+    [Fact]
+    public async Task Test1_AutogenCodeFromPlaywright()
+    {
+        using var playwright = await Playwright.CreateAsync();
+        await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+        {
+            Headless = false,
+        });
+        var context = await browser.NewContextAsync();
+
+        var page = await context.NewPageAsync();
+        await page.GotoAsync("https://localhost:5021/");
+        await page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Email" }).ClickAsync();
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Email" }).FillAsync("test@example.com");
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Password" }).ClickAsync();
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Password" }).FillAsync("Pa$$w0rd");
+        await page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        await Expect(page.GetByRole(AriaRole.Navigation)).ToContainTextAsync("Hello test@example.com!");
+        await page.GetByRole(AriaRole.Button, new() { Name = "Logout" }).ClickAsync();
+    }
 }
