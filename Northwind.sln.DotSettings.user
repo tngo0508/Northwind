@@ -2,7 +2,10 @@
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003ADbSet_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002E_002E_003F_002E_002E_003FUsers_003FThomas_0020Ngo_003FAppData_003FRoaming_003FJetBrains_003FRider2024_002E2_003Fresharper_002Dhost_003FSourcesCache_003F4b21fc3f8a3abb5d25f06c622276fbec0fd3932f169cc6af520bf5abc6a46b4_003FDbSet_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003APageActionEndpointConventionBuilderResourceCollectionExtensions_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002E_002E_003F_002E_002E_003FUsers_003FThomas_0020Ngo_003FAppData_003FRoaming_003FJetBrains_003FRider2024_002E2_003Fresharper_002Dhost_003FSourcesCache_003F78d5d9f754c736f88d5ee7798d15a7f7b6ff5a48ceafd45ac66465a8a58feb_003FPageActionEndpointConventionBuilderResourceCollectionExtensions_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=3d3ec21f_002De842_002D4f14_002Dacec_002D059d1cbf3ef7/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;Northwind.UnitTests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;Project Location="C:\workdir\scratch\web-dev-net9\MatureWeb\Northwind\Northwind.UnitTests" Presentation="&amp;lt;Northwind.UnitTests&amp;gt;" /&gt;&#xD;
+  &lt;Or&gt;&#xD;
+    &lt;Project Location="C:\workdir\scratch\web-dev-net9\MatureWeb\Northwind\Northwind.UnitTests" Presentation="&amp;lt;Northwind.UnitTests&amp;gt;" /&gt;&#xD;
+    &lt;Project Location="C:\workdir\scratch\web-dev-net9\MatureWeb\Northwind\Northwind.WebUITests" Presentation="&amp;lt;Northwind.WebUITests&amp;gt;" /&gt;&#xD;
+  &lt;/Or&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Northwind_002EMvc_002FResources_002FViews_002FHome_002FIndex/@EntryIndexedValue">False</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Northwind_002EMvc_002FResources_002FViews_002FHome_002FOrders/@EntryIndexedValue">False</s:Boolean>
