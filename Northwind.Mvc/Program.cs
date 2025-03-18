@@ -3,10 +3,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Caching.Hybrid;
 using Microsoft.Extensions.Caching.Memory; // To use IMemoryCache and so on.
 using Northwind.Mvc.Data;
 using Northwind.EntityModels;
 using Northwind.Mvc;
+using Northwind.Repositories;
 
 #endregion
 
@@ -57,6 +59,20 @@ builder.Services.AddOutputCache(options =>
     options.DefaultExpirationTimeSpan = TimeSpan.FromSeconds(DurationInSeconds.HalfMinute);
     options.AddPolicy("views", p => p.SetVaryByQuery("alertstyle"));
 });
+
+#pragma warning disable EXTEXP0018 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+builder.Services.AddHybridCache(options =>
+{
+    options.DefaultEntryOptions = new HybridCacheEntryOptions
+    {
+        Expiration = TimeSpan.FromSeconds(60),
+        LocalCacheExpiration = TimeSpan.FromSeconds(30)
+    };
+});
+
+#pragma warning restore EXTEXP0018
+
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 
 var app = builder.Build();
 
