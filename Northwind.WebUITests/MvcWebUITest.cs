@@ -1,4 +1,5 @@
 using Microsoft.Playwright;
+using static Microsoft.Playwright.Assertions; // To use Expect.
 
 namespace Northwind.WebUITests;
 
@@ -51,6 +52,69 @@ public class MvcWebUITest
             Path = Path.Combine(Environment.GetFolderPath(
                 Environment.SpecialFolder.Desktop),
                 $"homepage-{timestamp}.png")
+        });
+    }
+
+    [Fact]
+    public async Task HomePage_VistorCount()
+    {
+        // Arrange: Launch Chrome browser and navigate to home page.
+        using IPlaywright? playwright = await Playwright.CreateAsync();
+        await GotoHomePage(playwright);
+        
+        // The best wat to select the element is to use its data-testid
+        ILocator? element = _page?.GetByTestId("visitor_count");
+
+        string? countText = null;
+        if (element is not null)
+        {
+            // The text content might contain whitespace like \n so we mus trim that away
+            countText = (await element.TextContentAsync())?.Trim(); 
+        }
+        
+        bool isInteger = int.TryParse(countText, out int count);
+        
+        // Assert: Visitor count is as expected.
+        Assert.True(isInteger);
+        Assert.True(count >= 1 && count <= 1000);
+        await Expect(element).ToBeVisibleAsync();
+    }
+
+    [Fact]
+    public async Task HomePage_FilterProducts()
+    {
+        // Arrange: Launch Chrome browser and navigate to home page
+        using IPlaywright? playwright = await Playwright.CreateAsync();
+        await GotoHomePage(playwright);
+
+        if (_page is null)
+        {
+            throw new NullReferenceException("Home page not found.");
+        }
+        
+        // Set the price input box to 60.
+        ILocator price = _page.GetByTestId("price");
+        await price.FillAsync("60");
+        
+        // Click the submit button to apply the filter
+        ILocator submit = _page.GetByTestId("submit_price");
+        await submit.ClickAsync();
+        
+        string actualTitle = await _page.TitleAsync();
+        
+        // Assert: Navigating to products page worked
+        string expectedTitle = "Products That Cost More Than $60.00 - Northwind.Mvc";
+        Assert.NotNull(_response);
+        Assert.True(_response.Ok);
+        Assert.Equal(expectedTitle, actualTitle);
+        
+        string timestamp = DateTime.Now.ToString("u")
+            .Replace(":", "-").Replace(" ", "-");
+
+        await _page.ScreenshotAsync(new PageScreenshotOptions
+        {
+            Path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                $"products-{timestamp}.png")
         });
     }
 }

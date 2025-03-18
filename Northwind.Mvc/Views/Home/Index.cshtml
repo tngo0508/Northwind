@@ -5,6 +5,8 @@
 }
 @* <cache expires-after="@TimeSpan.FromMinutes(10)"/> *@
 
+We have had <span data-testid="visitor_count">@Model?.VisitorCount</span> visitors this month.
+
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p class="alert alert-primary">@DateTime.Now.ToLongTimeString()</p>
@@ -25,8 +27,8 @@
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
     <h3>Query products by price</h3>
     <form asp-action="ProductsThatCostMoreThan" method="get">
-        <input name="price" placeholder="Enter a product price"/>
-        <input type="submit"/>
+        <input name="price" placeholder="Enter a product price" data-testid="price"/>
+        <input type="submit" data-testid="submit_price"/>
     </form>
 </div>
 
