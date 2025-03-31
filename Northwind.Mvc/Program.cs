@@ -105,6 +105,32 @@ else
 app.UseHttpsRedirection();
 app.UseRouting();
 
+// Implementing an anonymous inline delegate as middleware to intercept HTTP requests and responses.
+app.Use(async (HttpContext context, Func<Task> next) =>
+{
+    WriteLine($"Request: {context.Request.Method} {context.Request.Path}");
+    RouteEndpoint? rep = context.GetEndpoint() as RouteEndpoint;
+    if (rep is not null)
+    {
+        WriteLine($"Endpoint: {rep.DisplayName}");
+        WriteLine($"Route: {rep.RoutePattern.RawText}");
+    }
+
+    if (context.Request.Path == "/bonjour")
+    {
+        // In the case of a match on URL path, this becomes a terminating delegate that returns so does not call the next delegate
+        await context.Response.WriteAsync("Bonjour Mondel!");
+        return;
+    }
+    // We could modify the request before calling the next delegate
+    
+    // Call the next delegate in the pipeline
+    await next();
+    
+    // The HTTP response is now being sent back through the pipeline.
+    // We could modify the resonse at this point before it continues.
+});
+
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -125,6 +151,8 @@ app.MapGet("/notcached", () => DateTime.Now.ToString());
 app.MapGet("/cached", () => DateTime.Now.ToString()).CacheOutput();
 
 app.MapGet("/env", () => $"Environment is { app.Environment.EnvironmentName }");
+
+
 
 app.Run();
 
