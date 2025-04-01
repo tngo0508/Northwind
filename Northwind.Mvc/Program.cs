@@ -16,6 +16,8 @@ using Northwind.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddServiceDefaults();
+
 builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSingleton<IMemoryCache>(new MemoryCache(
@@ -75,6 +77,8 @@ builder.Services.AddHybridCache(options =>
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 #endregion
 

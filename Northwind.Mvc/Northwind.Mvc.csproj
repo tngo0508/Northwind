@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Update="app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true"/>
+        <None Update="app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
     </ItemGroup>
 
     <ItemGroup>
@@ -23,6 +23,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Northwind.DataContext\Northwind.DataContext.csproj" />
       <ProjectReference Include="..\Northwind.Repositories\Northwind.Repositories.csproj" />
+      <ProjectReference Include="..\Northwind.ServiceDefaults\Northwind.ServiceDefaults.csproj" />
     </ItemGroup>
     
     <ItemGroup Label="To simplify use of WriteLine.">
