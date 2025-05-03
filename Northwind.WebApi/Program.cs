@@ -2,12 +2,20 @@ using Microsoft.AspNetCore.Mvc.Formatters; // To use IOutputFormatter.
 using Northwind.EntityModels; // To use AddNorthwindContext method.
 using Microsoft.Extensions.Caching.Hybrid;
 using Northwind.Repositories;
+using Microsoft.AspNetCore.HttpLogging;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddNorthwindContext();
 builder.Services.AddOpenApi();
 builder.Services.AddResponseCaching();
+
+builder.Services.AddHttpLogging(options =>
+{
+    options.LoggingFields = HttpLoggingFields.All;
+    options.RequestBodyLogLimit = 4096; // Default is 32k
+    options.ResponseBodyLogLimit = 4096; // Default is 32k
+});
 
 builder.Services.AddControllers(options =>
 {
@@ -48,6 +56,8 @@ builder.Services.AddHybridCache(options =>
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 
 var app = builder.Build();
+
+app.UseHttpLogging();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
