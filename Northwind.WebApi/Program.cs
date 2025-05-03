@@ -43,7 +43,7 @@ builder.Services.AddHybridCache(options =>
 });
 #pragma warning restore EXTEXP0018
 
-
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 
 var app = builder.Build();
 
