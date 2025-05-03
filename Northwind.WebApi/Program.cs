@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc.Formatters; // To use IOutputFormatter.
 using Northwind.EntityModels; // To use AddNorthwindContext method.
+using Microsoft.Extensions.Caching.Hybrid;
+using Northwind.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -29,6 +31,19 @@ builder.Services.AddControllers(options =>
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+#pragma warning disable EXTEXP0018
+builder.Services.AddHybridCache(options =>
+{
+    options.DefaultEntryOptions = new HybridCacheEntryOptions
+    {
+        Expiration = TimeSpan.FromSeconds(60),
+        LocalCacheExpiration = TimeSpan.FromSeconds(30)
+    };
+});
+#pragma warning restore EXTEXP0018
+
+
 
 var app = builder.Build();
 

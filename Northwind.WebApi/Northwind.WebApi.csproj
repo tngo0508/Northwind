@@ -8,10 +8,12 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi"/>
+        <PackageReference Include="Microsoft.Extensions.Caching.Hybrid" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\Northwind.DataContext\Northwind.DataContext.csproj"/>
+        <ProjectReference Include="..\Northwind.Repositories\Northwind.Repositories.csproj" />
     </ItemGroup>
     <ItemGroup Label="To simplify use of WriteLine.">
         <Using Include="System.Console" Static="true"/>
