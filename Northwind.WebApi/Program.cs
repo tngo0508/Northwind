@@ -6,6 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddNorthwindContext();
+builder.Services.AddOpenApi();
+builder.Services.AddResponseCaching();
 
 builder.Services.AddControllers(options =>
 {

@@ -37,6 +37,10 @@ public class CustomersController : ControllerBase
     [HttpGet("{id}", Name = nameof(GetCustomer))] // Named route
     [ProducesResponseType(200, Type = typeof(Customer))]
     [ProducesResponseType(404)]
+    [ResponseCache(Duration = 5, // Cache-control: max-age=5
+        Location = ResponseCacheLocation.Any, // Cache-Control: public
+        VaryByHeader = "User-Agent" // Vary: User-Agent
+        )]
     public async Task<IActionResult> GetCustomer(string id)
     {
         Customer? c = await _repo.RetrieveAsync(id, default);
