@@ -12,6 +12,9 @@ builder.Services.AddResponseCaching();
 
 builder.Services.AddHttpLogging(options =>
 {
+    // Add the Origin header so it will not be redacted.
+    options.RequestHeaders.Add("Origin");
+    
     options.LoggingFields = HttpLoggingFields.All;
     options.RequestBodyLogLimit = 4096; // Default is 32k
     options.ResponseBodyLogLimit = 4096; // Default is 32k
