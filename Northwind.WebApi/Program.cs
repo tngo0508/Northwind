@@ -58,7 +58,17 @@ builder.Services.AddHybridCache(options =>
 
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "Northwind.Mvc.Policy",
+        policy =>
+        {
+            policy.WithOrigins("https://localhost:5021");
+        });
+});
+
 var app = builder.Build();
+
 
 app.UseHttpLogging();
 
@@ -69,6 +79,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors(policyName: "Northwind.Mvc.Policy");
 
 app.UseAuthorization();
 
