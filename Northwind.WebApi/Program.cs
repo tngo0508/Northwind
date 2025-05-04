@@ -3,7 +3,12 @@ using Northwind.EntityModels; // To use AddNorthwindContext method.
 using Microsoft.Extensions.Caching.Hybrid;
 using Northwind.Repositories;
 using Microsoft.AspNetCore.HttpLogging;
+using System.Security.Claims; // To use ClaimsPrincipal.
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication(defaultScheme: "Bearer").AddJwtBearer();
 
 // Add services to the container.
 builder.Services.AddNorthwindContext();
@@ -84,5 +89,9 @@ app.UseCors(policyName: "Northwind.Mvc.Policy");
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapGet("/secret", (ClaimsPrincipal user) => string.Format("Welcom, {0}. The secret ingredient is love.",
+        user.Identity?.Name ?? "secure user"))
+    .RequireAuthorization();
 
 app.Run();

@@ -1,22 +1,24 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-    </PropertyGroup>
+      <UserSecretsId>e56f287a-015d-4176-a198-1a4d6cda6e91</UserSecretsId>
+  </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi"/>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
         <PackageReference Include="Microsoft.Extensions.Caching.Hybrid" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Northwind.DataContext\Northwind.DataContext.csproj"/>
+        <ProjectReference Include="..\Northwind.DataContext\Northwind.DataContext.csproj" />
         <ProjectReference Include="..\Northwind.Repositories\Northwind.Repositories.csproj" />
     </ItemGroup>
     <ItemGroup Label="To simplify use of WriteLine.">
-        <Using Include="System.Console" Static="true"/>
+        <Using Include="System.Console" Static="true" />
     </ItemGroup>
 
 </Project>
