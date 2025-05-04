@@ -1,0 +1,30 @@
+@model System.Collections.Generic.IEnumerable<Northwind.EntityModels.Customer>?
+
+<h2>@ViewData["Title"]</h2>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Company Name</th>
+        <th>Contact Name</th>
+        <th>Address</th>
+        <th>Phone</th>
+    </tr>
+    </thead>
+    <tbody>
+        @if (Model is not null)
+        {
+            @foreach (var c in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => c.CompanyName)</td>
+                    <td>@Html.DisplayFor(modelItem => c.ContactName)</td>
+                    <td>@Html.DisplayFor(modelItem => c.Address)</td>
+                    <td>@Html.DisplayFor(modelItem => c.City)</td>
+                    <td>@Html.DisplayFor(modelItem => c.Country)</td>
+                    <td>@Html.DisplayFor(modelItem => c.PostalCode)</td>
+                    <td>@Html.DisplayFor(modelItem => c.Phone)</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

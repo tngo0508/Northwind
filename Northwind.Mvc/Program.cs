@@ -9,6 +9,7 @@ using Northwind.Mvc.Data;
 using Northwind.EntityModels;
 using Northwind.Mvc;
 using Northwind.Repositories;
+using System.Net.Http.Headers; // To use MediaTypeHeaderValue
 
 #endregion
 
@@ -75,6 +76,15 @@ builder.Services.AddHybridCache(options =>
 #pragma warning restore EXTEXP0018
 
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+
+builder.Services.AddHttpClient(name: "Northwind.WebApi",
+    configureClient: options =>
+    {
+        options.BaseAddress = new Uri("https://localhost:5091/");
+        options.DefaultRequestHeaders.Accept.Add(
+            new MediaTypeWithQualityHeaderValue(
+                mediaType: "application/json", quality: 1.0));
+    });
 
 var app = builder.Build();
 
